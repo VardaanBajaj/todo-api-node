@@ -28,6 +28,15 @@ app.post('/todos', (req,res)=>{ // for creating todos
     });
 });
 
+app.use('/todos',(req,res)=>{
+  Todo.find().then((todos)=>{
+//    res.send(todos);
+  res.send({todos});  // to ad
+  },(e)=>{
+    res.status(400).send(e);
+  })
+});
+
 app.listen(3000, ()=> {
   console.log('Started on port 3000');
 });
