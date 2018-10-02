@@ -28,13 +28,13 @@ app.post('/todos', (req,res)=>{ // for creating todos
     });
 });
 
-app.use('/todos',(req,res)=>{
+app.get('/todos',(req,res)=>{
   Todo.find().then((todos)=>{
 //    res.send(todos);
-  res.send({todos});  // to ad
+  res.send({todos});  // to ad this on the server
   },(e)=>{
     res.status(400).send(e);
-  })
+  });
 });
 
 app.listen(3000, ()=> {
