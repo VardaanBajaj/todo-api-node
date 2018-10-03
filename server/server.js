@@ -7,6 +7,9 @@ var {Todo}=require('./models/todo');
 var {User}=require('./models/todo');
 
 var app=express();
+
+// for deploying to heroku
+const port=process.env.PORT || 3000;
 // making routes
 // inside of a rest api, we have
 // C-Create using post http method
@@ -59,7 +62,7 @@ app.get('/todos/:id', (req,res)=>{
 }); // url parameters follow ':'
 
 app.listen(3000, ()=> {
-  console.log('Started on port 3000');
+  console.log('Started on port ',port);
 });
 
 module.exports={app};
