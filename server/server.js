@@ -1,5 +1,6 @@
 const express=require('express');
 const bodyParser=require('body-parser');
+var {ObjectID}=require('mongodb');
 
 var {mongoose}=require('./db/mongoose');
 var {Todo}=require('./models/todo');
@@ -36,6 +37,26 @@ app.get('/todos',(req,res)=>{
     res.status(400).send(e);
   });
 });
+app.get('/todos/:id', (req,res)=>{
+  var id=req.params.id;
+//  res.send(req.params); /*also an object*/
+
+  //Validate id suing isValid
+  // change status code to 404 if not found/invalid
+  //query the database
+
+    if(!ObjectID.isValid(id))
+      return res.status(404).send();
+
+    Todo.findById(id).then((todo)=>{
+      if(!todo)
+        return res.status(404).send();
+      res.send({todo}); //passing as object gves flexibility to pass more parameers in future
+    }).catch((e)=>{
+      res.status(400).send();
+    });
+
+}); // url parameters follow ':'
 
 app.listen(3000, ()=> {
   console.log('Started on port 3000');
