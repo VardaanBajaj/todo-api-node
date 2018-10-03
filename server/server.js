@@ -41,7 +41,7 @@ app.get('/todos/:id', (req,res)=>{
   var id=req.params.id;
 //  res.send(req.params); /*also an object*/
 
-  //Validate id suing isValid
+   //Validate id suing isValid
   // change status code to 404 if not found/invalid
   //query the database
 
