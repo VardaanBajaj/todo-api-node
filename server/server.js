@@ -1,3 +1,4 @@
+require('./config/config.js');
 const express=require('express');
 const bodyParser=require('body-parser');
 const _=require('lodash');
@@ -10,7 +11,7 @@ var {User}=require('./models/todo');
 var app=express();
 
 // for deploying to heroku
-const port=process.env.PORT || 3000;
+const port=process.env.PORT;
 // making routes
 // inside of a rest api, we have
 // C-Create using post http method
