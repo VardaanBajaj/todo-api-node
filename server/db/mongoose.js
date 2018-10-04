@@ -5,8 +5,10 @@ const mongoose = require('mongoose');
 
 //built in proomise library
 mongoose.Promise=global.Promise;
-mongoose.connect(process.env.MONGODB_URI||'mongodb://localhost:27017/TodoApp');
+mongoose.connect(process.env.MONGODB_URI);
 
 module.exports={
   mongoose  // in ES6 configuration
 };
+
+// setting up test database
