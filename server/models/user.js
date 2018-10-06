@@ -57,11 +57,34 @@ UserSchema.methods.generateAuthToken=function() {
 
   user.tokens.push({access,token}); // which is usuallyy empty before the push
 
-  user.save().then(()=>{
+  return user.save().then(()=>{
     return token; // success argument for next then() call
   })  // this statement will execute in server js
 };  // instance methods
 // instance methods have access to individual documents
+UserSchema.statics.findByToken = function (token) {
+  var User = this;// instance methods get called with individual documents, model methods get called with the model as this binding
+  var decoded;  // to store decoded jwt values
+
+  try {
+    decoded = jwt.verify(token, 'abc123');
+  } catch (e) {
+    return Promise.reject();
+    // return new Promise((resolve,reject)=>{
+      //   reject();
+      // )};
+  }
+
+  return User.findOne({
+    '_id': decoded._id,
+    'tokens.token': token,
+    'tokens.access': 'auth'
+  });
+};
+
+// adding to .model ==>> instance method
+// adding to .statics ==>> model method
+
 var User = mongoose.model('User', UserSchema);
 
 module.exports = {User}

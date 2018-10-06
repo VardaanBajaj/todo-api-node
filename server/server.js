@@ -8,6 +8,7 @@ var {ObjectID}=require('mongodb');
 var {mongoose}=require('./db/mongoose');
 var {Todo}=require('./models/todo');
 var {User}=require('./models/user');
+var {authenticate}=require('./middleware/authenticate');
 
 var app=express();
 
@@ -79,6 +80,7 @@ app.delete('/todos/:id',(req,res)=>{
 });
 
 // http PATCH method helps to update queries
+// turning this route private
 app.patch('/todos/:id',(req,res)=>{
   var id=req.params.id;
   var body=_.pick(req.body,['text','completed']); // to store updates
@@ -111,19 +113,26 @@ app.post('/users',(req,res)=>{
   var user = new User(body);
 
   // model methods , called on Objects
-  // instance methods, ie noral variables
+  // instance methods, ie normal variables
 
   user.save().then(()=>{
   return  user.generateAuthToken();
-//    res.send(user);
-}).then((token)=>{
-  res.header('x-auth',token).send(user);  
-}).catch((e)=>{
+  //    res.send(user);
+  }).then((token)=>{
+    res.header('x-auth',token)/*key value pair*/.send(user);
+  }).catch((e)=>{
     res.status(400).send(e);
-  })
+  });
 });
 
-app.listen(3000, ()=> {
+
+// requires authentication, making it private
+app.get('/users/me', authenticate, /*specifying middleware*/ (req,res)=>{
+  res.send(req.user);
+});  // finds apt user and returns to associated callbacks
+
+
+app.listen(port, ()=> {
   console.log('Started on port ',port);
 });
 
