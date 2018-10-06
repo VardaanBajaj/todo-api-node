@@ -6,7 +6,7 @@ var authenticate =(req,res,next)=>{ //middleware has 3 arguments, actual route d
 
   User.findByToken(token).then((user)=>{
     if(!user) {
-      return Promise.reject();
+        return res.status(401).send();
     }
     req.user=user;
     req.token=token;

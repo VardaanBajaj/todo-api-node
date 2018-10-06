@@ -2,6 +2,7 @@ const mongoose=require('mongoose');
 const validator = require('validator');
 const jwt=require('jsonwebtoken');
 const _=require('lodash');
+const bcrypt=require('bcryptjs');
 // {
 //   email: 'vardaanbajaj26@gmail.com',
 //   password: 'qwfqiuwuefvBCLI',
@@ -81,6 +82,23 @@ UserSchema.statics.findByToken = function (token) {
     'tokens.access': 'auth'
   });
 };
+
+UserSchema.pre('save', function (next){
+  var user=this;
+
+  if(user.isModified('password'))  // returns true if parameter passed i modified, else not
+  {
+    bcrypt.genSalt(10, (err,salt)=>{
+      bcrypt.hash(user.password, salt, (err,hash)=>{
+        user.password=hash;
+        next();
+      });
+    });
+  }
+  else {
+    next();
+  }
+});  // run some code before saving an event
 
 // adding to .model ==>> instance method
 // adding to .statics ==>> model method

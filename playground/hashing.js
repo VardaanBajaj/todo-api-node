@@ -1,15 +1,31 @@
 const {SHA256}=require('crypto-js');
 const jwt=require('jsonwebtoken');
+const bcrypt=require('bcryptjs');
 
-var data={
-  id: 10
-};
 
-var token=jwt.sign(data, '123abc');  // takes the object and returns it's hash value
-console.log(token);
+var password='123abc!';
 
-var decoded=jwt.verify(token, '123abc'); // takes the token and verifies that it wasn't manipulated
-console.log(decoded);
+// we need to salt passwords adding some random characters to the passwords
+bcrypt.genSalt(10, (err, salt)=>{
+  bcrypt.hash(password,salt,(err,hash)=>{
+    console.log(hash);
+  });
+});    // 10=number of rounds taken to generate the salt
+
+var hashedPassword='$2a$10$w5pBVHGtjy/A3Ffoku491OMsx9LjKJwxOCK5LQ4.L5i7gjstvK/v2';
+
+bcrypt.compare(password,hashedPassword,(err,res)=>{
+  console.log(res);
+});
+
+// var data={
+//   id: 10
+// };
+// var token=jwt.sign(data, '123abc');  // takes the object and returns it's hash value
+// console.log(token);
+//
+// var decoded=jwt.verify(token, '123abc'); // takes the token and verifies that it wasn't manipulated
+// console.log(decoded);
 
 // // to hash a value, pass it into SHA256 function
 //
